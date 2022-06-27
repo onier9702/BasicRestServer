@@ -5,6 +5,8 @@ const { check } = require('express-validator');
 
 const { getUser, postUser, putUser, deleteUser } = require('../controllers/user');
 const { isValidRole, emailExists, idExists } = require('../helpers/db-validators');
+const { validateJWT } = require('../middlewares/validate-jwt');
+const { isAdminRole, haveRole } = require('../middlewares/validate-roles');
 const { validateFields } = require('../middlewares/validateFields');
 
 const router = Router();
@@ -34,6 +36,7 @@ router.post('/',
 router.put('/:id',
             // jsonParser,
             [
+                validateJWT,
                 check('id', 'It is not a ID valid').isMongoId(),
                 check('id').custom( idExists ),
                 check('role').custom( isValidRole ),
@@ -45,6 +48,9 @@ router.put('/:id',
 router.delete('/:id', 
             // jsonParser,
             [
+                validateJWT,
+                // isAdminRole,
+                haveRole('USER_ROLE','ADMIN_ROLE','SALES_ROLE'),
                 check('id', 'It is not a ID valid').isMongoId(),
                 check('id').custom( idExists ),
                 validateFields

@@ -15,5 +15,5 @@ server.listen();
 // 3- mongoose 
 // 4- express-validator
 // 5- bcryptjs
-// 3- body-parser
-
+// 15- body-parser
+// 6- jsonwebtoken
