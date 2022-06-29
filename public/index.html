@@ -5,10 +5,62 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>Google Sign-in</title>
+    <meta name="google-signin-client_id" content="169187233325-6ma3tcl4bin1162pdrq8uu9t3l8elq3l.apps.googleusercontent.com">
+
 </head>
 <body>
-    <h2>Denied Access</h2>
+    <h2>Google Sign in</h2>
     <hr/>
+
+    <div class="g-signin2" data-onsuccess="onSignIn"></div>
+
+    <script src="https://apis.google.com/js/platform.js" async defer></script>
+    
+    <a href="#" onclick="signOut();">Sign out</a>
+    
+    <script>
+        console.log('11111');
+        console.log(window.location);
+        var url = (window.location.hostname.includes('localhost'))
+                    ? 'http://localhost:8080/api/auth/google'
+                    : 'https://cafe-node-oco.herokuapp.com/api/auth/google';
+        
+        
+        function onSignIn(googleUser) {
+            console.log('Hollaaaaa');
+            var profile = googleUser.getBasicProfile();
+            console.log('ID: ' + profile.getId()); // Do not send to your backend! Use an ID token instead.
+            console.log('Name: ' + profile.getName());
+            console.log('Image URL: ' + profile.getImageUrl());
+            console.log('Email: ' + profile.getEmail()); // This is null if the 'email' scope is not present.
+            
+            var id_token = googleUser.getAuthResponse().id_token;
+            
+            const data = { id_token };
+            
+            fetch(url, {
+                method: 'POST',
+                headers: {'Content-Type': 'application/json' },
+                body: JSON.stringify( data )
+            })
+            .then( resp => resp.json() )
+            .then( data => console.log('Our Server: ', data) ) 
+            .catch( console.log );
+
+        }
+
+        function signOut() {
+            var auth2 = gapi.auth2.getAuthInstance();
+            auth2.signOut().then(function () {
+              console.log('User signed out.');
+            });
+        }
+        
+
+        </script>
+
+
+
 </body>
 </html>

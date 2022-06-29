@@ -12,7 +12,7 @@
 
 const { Schema, model } = require('mongoose');
 
-const userSchema = Schema({
+const UserSchema = Schema({
 
     name: {
         type: String,
@@ -32,6 +32,7 @@ const userSchema = Schema({
     },
     role: {
         type: String,
+        default: 'USER_ROLE',
         required: [true, 'Role is required'],
         emun: ['ADMIN_ROLE', 'USER_ROLE']
     },
@@ -45,10 +46,10 @@ const userSchema = Schema({
     },
 });
 
-userSchema.methods.toJSON = function() {
+UserSchema.methods.toJSON = function() {
     const { __v, password, _id, ...user } = this.toObject();
     user.uid = _id;
     return user;
 } 
 
-module.exports = model( 'user', userSchema );
+module.exports = model( 'User', UserSchema );
