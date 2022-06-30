@@ -1,6 +1,7 @@
 
 const express = require('express');
 const cors = require('cors');
+const fileUpload = require('express-fileupload');
 
 const { dbConnection } = require('../db/config');
 
@@ -15,7 +16,8 @@ class Server {
             categories: '/api/categories',
             products:   '/api/products',
             search:     '/api/search',
-            users:      '/api/users'
+            users:      '/api/users',
+            uploads:    '/api/uploads'
         }
 
         // Connect DB
@@ -23,8 +25,8 @@ class Server {
 
         //Middlewares
         this.middlewares();
+        
         //routes
-
         this.routes();
 
     }
@@ -41,6 +43,13 @@ class Server {
         // Read and Parse of Body
         this.app.use(express.json()); // any info on Body will be parse and transform to JSON
 
+        // Upload files
+        this.app.use(fileUpload({
+            useTempFiles : true,
+            tempFileDir : '/tmp/',
+            createParentPath: true
+        }));
+
     }
         
     routes() {
@@ -50,6 +59,7 @@ class Server {
         this.app.use( this.paths.products, require('../routes/products') );
         this.app.use( this.paths.search, require('../routes/search'));
         this.app.use( this.paths.users, require('../routes/user'));
+        this.app.use( this.paths.uploads, require('../routes/uploads'));
 
     }
 

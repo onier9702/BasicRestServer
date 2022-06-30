@@ -18,3 +18,6 @@ server.listen();
 // 15- body-parser
 // 6- jsonwebtoken
 // 7- dotenv
+// 8- express-fileupload
+// 9- uuid
+// 10- cloudinary

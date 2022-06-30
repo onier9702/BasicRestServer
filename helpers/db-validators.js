@@ -50,10 +50,24 @@ const existsProduct = async( id = '' ) => {
     };
 };
 
+// Validate allowed collections
+const allowedCollections = ( collection = '', arrColl = [] ) => {
+
+    const isIn = arrColl.includes(collection);
+
+    if ( !isIn ){
+        throw new Error(`Error, allowed collections are these [ ${arrColl} ]`);
+    };
+
+    return true;
+
+}
+
 module.exports = {
     isValidRole,
     emailExists,
     idExists,
     existsCategory,
-    existsProduct
+    existsProduct,
+    allowedCollections
 }
